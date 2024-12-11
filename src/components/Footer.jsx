@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa';
 import { AiOutlineArrowUp } from 'react-icons/ai';
-import logo from '../assets/logo2.svg';
+import logo from '../assets/l2.svg';
 import A1 from '../assets/A1.png';
 import A2 from '../assets/A2.png';
 import A3 from '../assets/A3.png';

@@ -6,6 +6,8 @@ import c2 from '../assets/c2.png';
 import c3 from '../assets/c3.png';
 import ph4 from '../assets/ph4.png';
 import rec from '../assets/Rec.png';
+import wifi from '../assets/wifi.png';
+import card from '../assets/Card.png';
 
 const LeftSection = () => {
   return (
@@ -53,13 +55,88 @@ const LeftSection = () => {
             </div>
           </div>
         </div>
-        <div className='relative w-full max-w-[130%] max-h-[100%] mx-auto p-4'>
-          <img src={backImg} alt="Background" className='w-full h-full rounded-lg' />
-          <img src={c1} alt="c1" className='absolute top-28 left-12 w-18 h-16' />
-          <img src={c2} alt="c2" className='absolute top-14 right-12 w-18 h-16' />
-          <img src={c3} alt="c3" className='absolute bottom-40 left-14 w-18 h-16' />
-          <img src={ph4} alt="ph4" className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 h-auto' /> 
-          <img src={rec} alt="Rec" className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/3 h-auto' style={{ marginTop: '18%' }} /> </div>
+        <div className="relative w-full max-w-[150%] max-h-[100%] mx-auto p-4">
+  {/* Background Image */}
+  <img src={backImg} alt="Background" className="w-full h-full rounded-lg" />
+
+  {/* Position Images with Comments */}
+  {/* Image 1 */}
+  <img
+    src={c1}
+    alt="c1"
+    className="absolute"
+    style={{ top: '120px', left: '50px', width: '72px', height: '64px' }}
+  />
+
+  {/* Image 2 */}
+  <img
+    src={c2}
+    alt="c2"
+    className="absolute"
+    style={{ top: '80px', right: '50px', width: '72px', height: '64px' }}
+  />
+
+  {/* Image 3 */}
+  <img
+    src={c3}
+    alt="c3"
+    className="absolute"
+    style={{ bottom: '160px', left: '60px', width: '72px', height: '64px' }}
+  />
+
+  {/* Central Image */}
+  <img
+    src={ph4}
+    alt="ph4"
+    className="absolute"
+    style={{
+      top: '160px',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      width: '50%',
+    }}
+  />
+
+  {/* Image 5 */}
+  <img
+    src={wifi}
+    alt="WiFi"
+    className="absolute"
+    style={{
+      top: '180px',
+      left: '74%',
+      transform: 'translateX(-50%)',
+      width: '180px',
+    }}
+  />
+
+  {/* Image 6 */}
+  <img
+    src={rec}
+    alt="Rec"
+    className="absolute"
+    style={{
+      top: '330px',
+      left: '42%',
+      transform: 'translateX(-50%)',
+      width: '43%',
+    }}
+  />
+
+  {/* Image 7 */}
+  <img
+    src={card}
+    alt="Card"
+    className="absolute"
+    style={{
+      top: '320px',
+      left: '85%',
+      transform: 'translateX(-50%)',
+      width: '240px',
+    }}
+  />
+</div>
+
       </div>
     </section>
   );

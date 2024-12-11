@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Logo from '../assets/logo.svg';
+import Logo from '../assets/l1.svg';
 import SearchIcon from '../assets/search.png';
 import MenuIcon from '../assets/menu.png';
 import { motion } from 'framer-motion';
