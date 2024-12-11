@@ -12,59 +12,56 @@ const Navbar = () => {
   };
 
   return (
-    <div className="w-full h-[96px] bg-white shadow-sm">
-      <div className="p-4 md:max-w-[1080px] max-w-[400px] m-auto w-full h-full flex justify-between items-center">
-        <img src={Logo} alt="logo" className="h-[25px] cursor-pointer" />
-
-        <ul className="hidden md:flex gap-8 font-medium text-gray-800">
-          <li className="hover:text-blue-600 cursor-pointer">Home</li>
-          <li className="hover:text-blue-600 cursor-pointer">About Us</li>
-          <li className="hover:text-blue-600 cursor-pointer">Our Services</li>
-          <li className="hover:text-blue-600 cursor-pointer">Contact Us</li>
-        </ul>
-
-        <div className="md:flex hidden items-center gap-4">
-          <button className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-            Download App
-          </button>
-          <button className="p-2 bg-gray-100 rounded-full hover:bg-gray-200">
-            <img src={SearchIcon} alt="search" className="w-5 h-5" />
-          </button>
-          <button className="p-2 bg-gray-100 rounded-full hover:bg-gray-200">
-            <img src={MenuIcon} alt="menu" className="w-5 h-5" />
+    <div className="w-full h-auto md:h-[96px] bg-white shadow-lg relative rounded-b-3xl transform transition-all ease-in-out duration-300 hover:shadow-2xl">
+      <div className="p-4 md:max-w-[1080px] max-w-full mx-auto w-full h-full flex flex-wrap md:flex-nowrap justify-between items-center">
+        <div className="flex justify-between items-center w-full md:w-auto">
+          <img src={Logo} alt="logo" className="h-[25px] cursor-pointer transition-transform transform hover:scale-105" />
+          <button onClick={handleToggle} className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors">
+            <img src={MenuIcon} alt="menu" className="w-6 h-6" />
           </button>
         </div>
 
-      
-      </div>
+        <ul className="hidden md:flex gap-4 lg:gap-8 font-medium text-gray-800">
+          <li className="hover:text-blue-600 cursor-pointer transition-all transform hover:scale-110">Home</li>
+          <li className="hover:text-blue-600 cursor-pointer transition-all transform hover:scale-110">About Us</li>
+          <li className="hover:text-blue-600 cursor-pointer transition-all transform hover:scale-110">Our Services</li>
+          <li className="hover:text-blue-600 cursor-pointer transition-all transform hover:scale-110">Contact Us</li>
+        </ul>
 
-      <div>
-        <motion.ul
-          initial={{ opacity: 0, x: 200 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 200 }}
-          className={
-            toggle
-              ? 'absolute z-10 p-4 bg-white w-full px-8 md:hidden'
-              : 'hidden'
-          }
+        <div className="hidden md:flex items-center gap-4">
+          <button className="px-4 lg:px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm lg:text-base shadow-lg transform transition-all hover:scale-105">
+            Download App
+          </button>
+          <button className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors shadow-md transform transition-all hover:scale-110">
+            <img src={SearchIcon} alt="search" className="w-5 h-5" />
+          </button>
+          <button className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors shadow-md transform transition-all hover:scale-110">
+            <img src={MenuIcon} alt="menu" className="w-6 h-6" />
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: toggle ? 1 : 0, height: toggle ? 'auto' : 0 }}
+          transition={{ duration: 0.3 }}
+          className="w-full md:hidden overflow-hidden"
         >
-          <li className="p-4 hover:bg-gray-50">Home</li>
-          <li className="p-4 hover:bg-gray-50">About Us</li>
-          <li className="p-4 hover:bg-gray-50">Our Services</li>
-          <li className="p-4 hover:bg-gray-50">Contact Us</li>
-          <div className="flex flex-col my-4 gap-4">
-            <button className="px-8 py-3 bg-[#5F77FF] text-white">
-              Download App
-            </button>
-            <button className="p-4 bg-gray-100 rounded-full hover:bg-gray-200">
-              <img src={SearchIcon} alt="search" className="w-5 h-5" />
-            </button>
-            <button className="p-4 bg-gray-100 rounded-full hover:bg-gray-200">
-              <img src={MenuIcon} alt="menu" className="w-5 h-5" />
-            </button>
-          </div>
-        </motion.ul>
+          <ul className="flex flex-col w-full bg-white mt-4 space-y-2">
+            <li className="px-4 py-3 hover:bg-gray-50 rounded-lg transition-colors">Home</li>
+            <li className="px-4 py-3 hover:bg-gray-50 rounded-lg transition-colors">About Us</li>
+            <li className="px-4 py-3 hover:bg-gray-50 rounded-lg transition-colors">Our Services</li>
+            <li className="px-4 py-3 hover:bg-gray-50 rounded-lg transition-colors">Contact Us</li>
+            <div className="flex flex-col gap-3 p-4">
+              <button className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg transform transition-all hover:scale-105">
+                Download App
+              </button>
+              <button className="w-full px-4 py-3 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center shadow-md transform transition-all hover:scale-110">
+                <img src={SearchIcon} alt="search" className="w-5 h-5" />
+              </button>
+            </div>
+          </ul>
+        </motion.div>
       </div>
     </div>
   );
