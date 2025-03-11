@@ -1,0 +1,282 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@inject IStringLocalizer<SharedResource> StringLocalizer
+@inject SCManagement.Services.UserService.IUserService UserService
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    #confirmedToast {
+        position: fixed;
+        top: 10%;
+        left: 0;
+        border: 1px solid #00639A;
+        border-right: 8px solid #00639A;
+        transform: translateY(-100px);
+        animation: slideRight 1s ease forwards .5s;
+    }
+
+    @@media only screen and (max-width:768px) {
+        #clubContext {
+            width: 35% !important;
+        }
+    }
+
+    .selectClub {
+        background-image: linear-gradient(45deg, transparent 50%, gray 50%), linear-gradient(135deg, gray 50%, transparent 50%), linear-gradient(to right, #ccc, #ccc);
+        background-position: calc(100% - 20px) calc(1em + 2px), calc(100% - 15px) calc(1em + 2px), calc(100% - 2.5em) 0.5em;
+        background-size: 5px 5px, 5px 5px, 1px 1.5em;
+        background-repeat: no-repeat;
+    }
+
+    .selectClub:focus {
+        background-image: linear-gradient(45deg, #00639A 50%, transparent 50%), linear-gradient(135deg, transparent 50%, #00639A 50%), linear-gradient(to right, #ccc, #ccc);
+        background-position: calc(100% - 15px) 1em, calc(100% - 20px) 1em, calc(100% - 2.5em) 0.5em;
+        background-size: 5px 5px, 5px 5px, 1px 1.5em;
+        background-repeat: no-repeat;
+        border-color: #00639A;
+        outline: 0;
+    }
+
+
+</style>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SCManagement</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/DataTables/datatables.css" asp-append-version="true" />
+    <link rel="icon" type="image/x-icon" href="/img/icon.ico">
+    <link rel="stylesheet" href="~/lib/chosen_v1.8.7/chosen.min.css">
+</head>
+<body class="body">
+    <header>
+        <nav class="navbar fixed-top navbar-expand-md navbar-light bg-white box-shadow mb-3 shadow" id="navBar">
+            <div class="container-fluid">
+				<a asp-controller="Home" asp-action="Index">
+					<img src="~/img/mylog.png" alt="MY club logo" class="navbar-brand" width="158" height="66" style="position: relative;">
+				</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-between" style="text-align:center;">
+                    <div class="navbar-nav">
+
+                        <a class="btn nav-item nav-link text-to-dark" style="color:black;" asp-controller="Home" asp-action="Index">@StringLocalizer["Home"]</a>
+
+                        @{
+                            var isSignedIn = SignInManager.IsSignedIn(User);
+                            var userId = isSignedIn ? UserManager.GetUserId(User) : null;
+                            var isStaff = string.IsNullOrEmpty(userId) ? false : UserService.IsStaffInAnyClub(userId).Result;
+                            var isSystemAdmin = string.IsNullOrEmpty(userId) ? false : UserService.UserIsAdmin(userId).Result;
+                            var isAthlete = string.IsNullOrEmpty(userId) ? false : UserService.IsAtleteInAnyClub(userId).Result;
+                            var user = isSignedIn ? UserManager.GetUserAsync(User).Result : null;
+                        }
+
+                        @if (isSignedIn)
+                        {
+                            <div class="dropdown nav-item d-none d-md-block" id="dropdown2">
+                                <a class="btn nav-item nav-link text-to-dark" style="color:black;" data-bs-toggle="dropdown" aria-expanded="false">@StringLocalizer["Clubs"]</a>
+                                <ul class="dropdown-menu dropdown-menu2 nav-item shadow" id="dropdownMenu2" style="margin-top: 16px; border:none; border-radius:0;">
+                                    <li style="padding: 5px;">
+                                        <a class="nav-item nav-link text-to-dark" style="color:black;" asp-controller="MyClub" asp-action="Index">@StringLocalizer["My Club"]</a>
+                                    </li>
+                                    <li style="padding: 5px;">
+                                        <a class="nav-item nav-link text-to-dark" style="color:black;" asp-controller="Clubs" asp-action="Index" asp-route-id="">@StringLocalizer["Search club"]</a>
+                                    </li>
+                                    <li style="padding: 5px;">
+                                        <a type="button" class="nav-item nav-link text-to-dark" style="color:black;" asp-controller="Clubs" asp-action="Join">@StringLocalizer["Join with code"] </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="dropdown d-block d-md-none nav-item">
+                                <a class="nav-link text-to-dark" data-bs-toggle="dropdown" id="dropdownMobile" aria-expanded="false" style="color:black;">@StringLocalizer["Clubs"]</a>
+                                <ul class="dropdown-menu dropdown-menu-full" role="menu" id="Dropdown">
+                                    <li style="padding: 5px;">
+                                        <a class="nav-item nav-link text-to-dark" style="color:black;" asp-controller="MyClub" asp-action="Index">@StringLocalizer["My Club"]</a>
+                                    </li>
+                                    <li style="padding: 5px;">
+                                        <a class="nav-item nav-link text-to-dark" style="color:black;" asp-controller="Clubs" asp-action="Index" asp-route-id="">@StringLocalizer["Search club"]</a>
+                                    </li>
+                                    <li style="padding: 5px;">
+                                        <a type="button" class="nav-item nav-link text-to-dark" style="color:black;" asp-controller="Clubs" asp-action="Join">@StringLocalizer["Join with code"] </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+
+                            <a class="btn nav-item nav-link text-to-dark" style="color:black;" asp-controller="Events" asp-action="Index">@StringLocalizer["Events"]</a>
+                            <a class="btn nav-item nav-link text-to-dark" style="color:black;" asp-controller="Clubs" asp-action="Plans">@StringLocalizer["Club Plans"]</a>
+                            @if (isStaff)
+                            {
+                                <div class="dropdown nav-item d-none d-md-block" id="dropdown3">
+                                    <a class="btn nav-item nav-link text-to-dark" style="color:black;" data-bs-toggle="dropdown" aria-expanded="false">@StringLocalizer["Trainer Zone"]</a>
+                                    <ul class="dropdown-menu dropdown-menu2 nav-item shadow" id="dropdownMenu3" style="margin-top: 16px; border:none; border-radius:0;">
+                                        <li style="padding: 5px;">
+                                            <a class="nav-item nav-link text-to-dark" style="color:black;" asp-controller="Plans" asp-action="TrainingZone">@StringLocalizer["Training Zone"]</a>
+                                        </li>
+                                        <li style="padding: 5px;">
+                                            <a class="nav-item nav-link text-to-dark" style="color:black;" asp-controller="Plans" asp-action="Templates" asp-route-id="">@StringLocalizer["Templates"]</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
+
+                            @if (isAthlete)
+                            {
+                                <a class="btn nav-item nav-link text-to-dark" asp-controller="MyZone" asp-action="Index">@StringLocalizer["MyZone"]</a>
+                            }
+
+                            @if (isSystemAdmin)
+                            {
+                                <div class="dropdown nav-item d-none d-md-block" id="dropdown4">
+                                    <a class="btn nav-item nav-link text-to-dark" style="color:black;" data-bs-toggle="dropdown" aria-expanded="false">@StringLocalizer["Backoffice"]</a>
+                                    <ul class="dropdown-menu dropdown-menu2 nav-item shadow" id="dropdownMenu3" style="margin-top: 16px; border:none; border-radius:0;">
+                                        <li style="padding: 5px;">
+                                            <a class="nav-item nav-link text-to-dark" style="color:black;" asp-controller="Backoffice" asp-action="Index">@StringLocalizer["Stats"]</a>
+                                        </li>
+                                        <li style="padding: 5px;">
+                                            <a class="nav-item nav-link text-to-dark" style="color:black;" asp-controller="Backoffice" asp-action="Operations">@StringLocalizer["Operations"]</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
+
+                            <hr />
+                            <div class="dropdown d-block d-md-none nav-item">
+                                <a class="nav-link text-to-dark" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @StringLocalizer["More"]
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-full" style="border-bottom:none !important; margin-top:0;" role="menu" id="Dropdown">
+                                    <li class="dropdown-item" style="padding: 5px;">
+                                        <a class="nav-link text-to-dark dropdown-text" style="color:black;" asp-area="Identity" asp-page="/Account/Manage/Index" title=@StringLocalizer["Profile"]>@user?.FullName</a>
+                                    </li>
+                                    <li class="dropdown-item" style="padding: 5px;">
+                                        <a class="nav-item nav-link text-to-dark" style="color:black;" asp-controller="User" asp-action="UpdateNotificationsSettings">@StringLocalizer["NotificationsSettings"]</a>
+                                    </li>
+                                    <li class="dropdown-item" style="padding: 5px;">
+                                        <a class="nav-item nav-link text-to-dark" style="color:black;" asp-controller="Home" asp-action="TermsAndConditions">@StringLocalizer["Terms&Conditions"]</a>
+                                    </li>
+                                    <li class="dropdown-item" style="padding: 5px;">
+                                        <a class="nav-link text-to-dark dropdown-text" style="color:black;" asp-controller="Payment" asp-action="Index">@StringLocalizer["Wallet"]</a>
+                                    </li>
+                                    <li class="dropdown-item" style="padding: 5px;">
+                                        <a class="nav-link text-to-dark dropdown-text" style="color:black;" asp-controller="Subscription" asp-action="Index">@StringLocalizer["Subscriptions"]</a>
+                                    </li>
+                                    <li class="mt-2" style="padding: 5px;">
+                                        <i style="margin-left:15px; margin-right:5px;" class="fa-solid fa-moon fa-lg text-to-dark"></i>
+                                        <label class="text-to-dark">@StringLocalizer["Dark Mode"]</label>
+                                        <label class="switch" style="margin-left: 10px;">
+                                            <input type="checkbox" onchange="darkThemeToggle(this)" id="darkToggle1">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </li>
+                                    <li class="mt-2" style="padding: 5px;">
+                                        <i style="margin-left:15px; margin-right:5px;" class="fa-solid fa-earth-americas text-to-dark"></i>
+                                        <label class="col-auto">
+                                            @await Component.InvokeAsync("CulturePicker")
+                                        </label>
+                                    </li>
+                                    <li class="mt-2 d-flex justify-content-center align-items-center w-100" style="padding: 5px;">
+                                        <div id="clubContext" class="w-auto">
+                                            @await Component.InvokeAsync("UserClubContext")
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <hr />
+                            <div class="d-block d-md-none nav-item d-flex justify-content-center mb-2">
+                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                    <button type="submit" style="color:black; text-align:left !important;" class="nav-link btn btn-link text-to-dark w-100 dropdown-text">@StringLocalizer["Logout"]</button>
+                                </form>
+                            </div>
+                        }
+                        else
+                        {
+                            <a class="btn nav-item nav-link text-to-dark" style="color:black;" asp-controller="Clubs" asp-action="Index">@StringLocalizer["Clubs"]</a>
+                            <a class="btn nav-item nav-link text-to-dark" style="color:black;" asp-controller="Events" asp-action="Index">@StringLocalizer["Events"]</a>
+                            <a class="btn nav-item nav-link text-to-dark" style="color:black;" asp-controller="Clubs" asp-action="Plans">@StringLocalizer["Club Plans"]</a>
+                            <a class="btn nav-item nav-link text-to-dark" style="color:black;" asp-controller="Home" asp-action="About">@StringLocalizer["About Us"]</a>
+                            <a class="nav-item nav-link text-to-dark" style="color:black;" asp-controller="Home" asp-action="TermsAndConditions">@StringLocalizer["Terms&Conditions"]</a>
+                            <hr />
+                            <div class="dropdown d-block d-md-none nav-item">
+                                <a class="nav-link text-to-dark" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @StringLocalizer["More"]
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-full" role="menu" id="Dropdown">
+                                    <li style="padding: 5px;">
+                                        <i style="margin-left:15px; margin-right:5px;" class="fa-solid fa-moon fa-lg text-to-dark"></i>
+                                        <label class="text-to-dark">@StringLocalizer["Dark Mode"]</label>
+                                        <label class="switch" style="margin-left: 10px;">
+                                            <input type="checkbox" onchange="darkThemeToggle(this)" id="darkToggle1">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </li>
+                                    <li class="dropdown-item" style="padding: 5px;">
+                                        <i style="margin-left:15px; margin-right:5px;" class="fa-solid fa-earth-americas text-to-dark"></i>
+                                        <label class="col-auto">
+                                            @await Component.InvokeAsync("CulturePicker")
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                            <hr />
+                        }
+
+                    </div>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+
+    </header>
+    <div class="container-fluid p-0">
+        <main role="main" class="pb-3" style="margin-top:70px !important; ">
+            @RenderBody()
+        </main>
+    </div>
+
+
+
+
+    <footer class="align-content-end" id="footer">
+        <partial name="footer"></partial>
+    </footer>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/8b1729a957.js" crossorigin="anonymous"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="/lib/chosen_v1.8.7/chosen.jquery.min.js" type="text/javascript"></script>
+    <script>
+        $(".chosen-select").chosen().css("display", "").addClass("sr-only");
+
+        if (document.getElementById("dropdownMenu2") != null)
+            document.getElementById("dropdownMenu2").classList.add("dropdown-menu");
+
+        if (document.getElementById("dropdownMenu3") != null)
+            document.getElementById("dropdownMenu3").classList.add("dropdown-menu");
+
+        if (document.getElementById("dropdown2") != null)
+            document.getElementById("dropdown2").classList.add("dropdown");
+
+        if (document.getElementById("dropdown3") != null)
+            document.getElementById("dropdown3").classList.add("dropdown");
+
+        if (document.getElementById("dropdown4") != null)
+            document.getElementById("dropdown4").classList.add("dropdown");
+
+        function closeToast() {
+            $("#confirmedToast").hide();
+        }
+        
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

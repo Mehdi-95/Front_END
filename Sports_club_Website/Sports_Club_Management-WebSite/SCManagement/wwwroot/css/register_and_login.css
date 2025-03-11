@@ -1,0 +1,15 @@
+.signup {
+    border-radius: 10px;
+    margin-left: 20px;
+    padding: 5px 25px;
+    background-color: #50fa7b; /* Neon green background */
+    border-color: #50fa7b; /* Neon green border */
+    color: #1E1E2E; /* Dark text for contrast */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+    .signup:hover {
+        color: #50fa7b; /* Neon green text */
+        background-color: transparent !important; /* Transparent background */
+        border-color: #50fa7b; /* Neon green border */
+    }

@@ -1,0 +1,140 @@
+﻿@inject IHtmlLocalizer<SharedResource> HtmlLocalizer
+@inject IStringLocalizer<SharedResource> StringLocalizer
+@inject SCManagement.Services.SharedResourceService shared
+
+@{
+	ViewData["Title"] = @StringLocalizer["HomePage"];
+}
+
+<style>
+	/* General Styles */
+	body {
+		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		background-color: #f8f9fa;
+		color: #333;
+	}
+
+	.card {
+		height: 92vh;
+		border: none;
+		border-radius: 15px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		background: linear-gradient(135deg, #ffffff, #f1f3f5);
+	}
+
+	#arrow {
+		position: absolute;
+		right: 50px;
+		bottom: 50px;
+	}
+
+		#arrow i {
+			font-size: 50px;
+			color: #00639A;
+			transition: color 0.3s ease;
+		}
+
+			#arrow i:hover {
+				color: #004080;
+			}
+
+	#sitetitle {
+		width: 700px;
+		height: 400px;
+		margin: 0 auto;
+	}
+
+	#slogan {
+		font-size: 24px;
+		font-weight: 300;
+		color: #00639A;
+		margin-top: 20px;
+	}
+
+	@@media only screen and (max-width: 768px) {
+		#sitetitle
+
+	{
+		width: 100% !important;
+		height: auto !important;
+	}
+
+	#slogan {
+		font-size: 18px;
+	}
+
+	#arrow {
+		right: 20px;
+		bottom: 20px;
+	}
+
+	}
+
+	/* Section Styles */
+	.demo {
+		padding: 60px 0;
+	}
+
+	.container-fluid {
+		padding: 0;
+	}
+
+	.card-body {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+	}
+
+	/* Animation for Arrow */
+	.fa-fade {
+		animation: fadeInOut 2s infinite;
+	}
+
+	@@keyframes fadeInOut {
+		0%, 100%
+
+	{
+		opacity: 0.5;
+	}
+
+	50% {
+		opacity: 1;
+	}
+
+	}</style>
+
+<div class="container-fluid">
+	<!-- Hero Section -->
+	<section id="section01" class="demo">
+		<div id="card" class="card">
+			<div class="card-body">
+				<h1 class="text-to-dark" id="sitetitle">Welcome to SCManagement</h1>
+				<p class="text-to-dark" id="slogan" style="margin-top:10px;">@StringLocalizer["SLOGAN"]</p>
+				<p>Join us in our journey to fitness, teamwork, and sportsmanship!</p>
+				<button onclick="location.href='#section02'">Learn More</button>
+			</div>
+			<div id="arrow">
+				<a id="arrowa" href="#section02"><i class="fa-solid fa-arrow-down fa-fade fa-2xl" style="font-size:50px;"></i></a>
+			</div>
+		</div>
+	</section>
+</div>
+
+<div class="container">
+	<section id="section02" class="demo">
+		<partial name="_InfoPartial" />
+	</section>
+</div>
+
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+<script>
+	$(function () {
+		$('a[href*="#"]').on('click', function (e) {
+			e.preventDefault();
+			$('html, body').animate({ scrollTop: $($(this).attr('href')).offset().top - 130 }, 200, 'linear');
+		});
+	});
+</script>
